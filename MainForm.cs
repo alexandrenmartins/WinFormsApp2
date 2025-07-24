@@ -54,26 +54,37 @@ namespace WinFormsRdp
         // ---------- botão Conectar ----------
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            rdp.Server = txtServer.Text.Trim();        // 52.203.146.198
+            // –– credenciais / host ––
+            rdp.Server = txtServer.Text.Trim();      // 52.203.146.198
             rdp.Domain = "ASPEC";
-            rdp.UserName = txtUser.Text.Trim();          // 05037031330
+            rdp.UserName = txtUser.Text.Trim();        // 05037031330
 
-            // senha
-            ((IMsRdpClientAdvancedSettings)rdp.AdvancedSettings)
-                .ClearTextPassword = txtPassword.Text;
-
-            // --------- HABILITA NLA ---------
+            // –– senha clara ––
             var adv7 = (IMsRdpClientAdvancedSettings7)rdp.AdvancedSettings;
-            adv7.EnableCredSspSupport = true;   // envia CredSSP
-            adv7.AuthenticationLevel = 2;      // 0 = none, 1 = optional, 2 = require
+            adv7.ClearTextPassword = txtPassword.Text;
 
-            // resolução
-            rdp.DesktopWidth = rdp.Width;
-            rdp.DesktopHeight = rdp.Height;
+            // –– habilita NLA / CredSSP ––
+            adv7.EnableCredSspSupport = true;          // envia CredSSP
+            adv7.AuthenticationLevel = 2;             // 0 = none, 1 = optional, 2 = require
 
-            try { rdp.Connect(); }
+            // –– ativa SmartSizing para escalar a imagem ––
+            adv7.SmartSizing = true;
+
+            // define uma resolução inicial razoável (será escalada depois)
+            rdp.DesktopWidth = 1680;
+            rdp.DesktopHeight = 1080;
+
+            try
+            {
+                rdp.Connect();
+            }
             catch (Exception ex)
-            { MessageBox.Show("Falha ao conectar:\n" + ex.Message); }
+            {
+                MessageBox.Show("Falha ao conectar:\n" + ex.Message,
+                                "RDP",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
         }
 
         // ---------- ao conectar, esconde campos ----------
