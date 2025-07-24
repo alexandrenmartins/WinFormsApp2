@@ -19,65 +19,87 @@
             base.Dispose(disposing);
         }
 
+        #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            lblServer = new();
-            lblUser = new();
-            lblPassword = new();
-            txtServer = new();
-            txtUser = new();
-            txtPassword = new();
-            btnConnect = new();
-            chkAdmin = new();
-
-            SuspendLayout();
+            this.components = new System.ComponentModel.Container();
+            this.lblServer = new System.Windows.Forms.Label();
+            this.lblUser = new System.Windows.Forms.Label();
+            this.lblPassword = new System.Windows.Forms.Label();
+            this.txtServer = new System.Windows.Forms.TextBox();
+            this.txtUser = new System.Windows.Forms.TextBox();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.chkAdmin = new System.Windows.Forms.CheckBox();
+            this.SuspendLayout();
+            //
             // lblServer
-            lblServer.AutoSize = true;
-            lblServer.Location = new(12, 15);
-            lblServer.Text = "Servidor:";
+            //
+            this.lblServer.AutoSize = true;
+            this.lblServer.Location = new System.Drawing.Point(12, 15);
+            this.lblServer.Name = "lblServer";
+            this.lblServer.Size = new System.Drawing.Size(51, 15);
+            this.lblServer.Text = "Servidor:";
+            //
             // txtServer
-            txtServer.Location = new(90, 12);
-            txtServer.Size = new(200, 23);
+            //
+            this.txtServer.Location = new System.Drawing.Point(90, 12);
+            this.txtServer.Size = new System.Drawing.Size(200, 23);
+            //
             // lblUser
-            lblUser.AutoSize = true;
-            lblUser.Location = new(12, 44);
-            lblUser.Text = "Usuário:";
+            //
+            this.lblUser.AutoSize = true;
+            this.lblUser.Location = new System.Drawing.Point(12, 44);
+            this.lblUser.Size = new System.Drawing.Size(48, 15);
+            this.lblUser.Text = "Usuário:";
+            //
             // txtUser
-            txtUser.Location = new(90, 41);
-            txtUser.Size = new(200, 23);
+            //
+            this.txtUser.Location = new System.Drawing.Point(90, 41);
+            this.txtUser.Size = new System.Drawing.Size(200, 23);
+            //
             // lblPassword
-            lblPassword.AutoSize = true;
-            lblPassword.Location = new(12, 73);
-            lblPassword.Text = "Senha:";
+            //
+            this.lblPassword.AutoSize = true;
+            this.lblPassword.Location = new System.Drawing.Point(12, 73);
+            this.lblPassword.Size = new System.Drawing.Size(41, 15);
+            this.lblPassword.Text = "Senha:";
+            //
             // txtPassword
-            txtPassword.Location = new(90, 70);
-            txtPassword.PasswordChar = '●';
-            txtPassword.Size = new(200, 23);
+            //
+            this.txtPassword.Location = new System.Drawing.Point(90, 70);
+            this.txtPassword.PasswordChar = '●';
+            this.txtPassword.Size = new System.Drawing.Size(200, 23);
+            //
             // chkAdmin
-            chkAdmin.AutoSize = true;
-            chkAdmin.Location = new(90, 99);
-            chkAdmin.Text = "Sessão /admin";
+            //
+            this.chkAdmin.AutoSize = true;
+            this.chkAdmin.Location = new System.Drawing.Point(90, 99);
+            this.chkAdmin.Text = "Sessão /admin";
+            //
             // btnConnect
-            btnConnect.Location = new(90, 130);
-            btnConnect.Size = new(90, 27);
-            btnConnect.Text = "Conectar";
-            btnConnect.Click += btnConnect_Click;
+            //
+            this.btnConnect.Location = new System.Drawing.Point(90, 130);
+            this.btnConnect.Size = new System.Drawing.Size(90, 27);
+            this.btnConnect.Text = "Conectar";
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            //
             // MainForm
-            ClientSize = new(320, 175);
-            Controls.AddRange(new System.Windows.Forms.Control[]
+            //
+            this.ClientSize = new System.Drawing.Size(320, 175);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.Controls.AddRange(new System.Windows.Forms.Control[]
             {
-                lblServer, txtServer,
-                lblUser,   txtUser,
-                lblPassword, txtPassword,
-                chkAdmin,
-                btnConnect
+                this.btnConnect, this.chkAdmin, this.txtPassword,
+                this.lblPassword, this.txtUser, this.lblUser,
+                this.txtServer,   this.lblServer
             });
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            MaximizeBox = false;
-            Text = "RDP Launcher";
-            ResumeLayout(false);
-            PerformLayout();
+            this.Name = "MainForm";
+            this.Text = "RDP Launcher";
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
+        #endregion
     }
 }
