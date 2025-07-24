@@ -71,7 +71,7 @@ namespace WinFormsRdp
             adv7.SmartSizing = true;
 
             // define uma resolução inicial razoável (será escalada depois)
-            rdp.DesktopWidth = 1680;
+            rdp.DesktopWidth = 1920;
             rdp.DesktopHeight = 1080;
 
             try
