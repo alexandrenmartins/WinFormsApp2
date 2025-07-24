@@ -8,10 +8,6 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PlatformTarget>x86</PlatformTarget>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="CredentialManagement" Version="1.0.2" />
-	</ItemGroup>
 	<ItemGroup>
 		<COMReference Include="MSTSCLib">
 			<Guid>8C11EFA1-92C3-11D1-BC1E-00C04FA31489</Guid>
