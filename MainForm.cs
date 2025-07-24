@@ -1,72 +1,93 @@
 using System;
 using System.Windows.Forms;
-using AxMSTSCLib;            // ActiveX
-using MSTSCLib;             // Interfaces
+using AxMSTSCLib;      // ActiveX wrapper
+using MSTSCLib;       // Interfaces do RDP
 
 namespace WinFormsRdp
 {
     public partial class MainForm : Form
     {
-        private readonly AxMsRdpClient11NotSafeForScripting rdp;   // controle RDP
+        private AxMsRdpClient10NotSafeForScripting rdp;   // <<< use 11 se existir
 
         public MainForm()
         {
             InitializeComponent();
 
-            // ---------- valores mockados ----------
+            // valores mockados
             txtServer.Text = "52.203.146.198";
             txtUser.Text = @"ASPEC\05037031330";
             txtPassword.Text = "9876@Aspec";
-
-            // ---------- cria e adiciona o ActiveX ----------
-            rdp = new AxMsRdpClient11NotSafeForScripting();
-            ((System.ComponentModel.ISupportInitialize)rdp).BeginInit();
-            rdp.Dock = DockStyle.Fill;
-            rdp.Visible = false;                 // só mostra depois de conectar
-            Controls.Add(rdp);
-            ((System.ComponentModel.ISupportInitialize)rdp).EndInit();
-
-            // eventos para feedback
-            rdp.OnConnected += (_, __) => OnRdpConnected();
-            rdp.OnDisconnected += (_, e) =>
-                MessageBox.Show($"Desconectado (código {e.discReason})");
         }
 
+        // ---------- cria o ActiveX quando o Form carrega ----------
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            try
+            {
+                rdp = new AxMsRdpClient10NotSafeForScripting();   // <<< use 11 se existir
+                ((System.ComponentModel.ISupportInitialize)rdp).BeginInit();
+                rdp.Dock = DockStyle.Fill;
+                rdp.Visible = false;
+                Controls.Add(rdp);
+                ((System.ComponentModel.ISupportInitialize)rdp).EndInit();
+
+                rdp.CreateControl();   // força inicialização COM
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Falhou ao criar ActiveX RDP:\n\n" + ex,
+                                "Init RDP",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                Close();
+                return;
+            }
+
+            // eventos de feedback
+            rdp.OnConnected += (_, __) => OnRdpConnected();
+            rdp.OnDisconnected += (_, e2) =>
+                MessageBox.Show($"Desconectado (código {e2.discReason})");
+        }
+
+        // ---------- botão Conectar ----------
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            // já estão mockados, mas pode ler dos TextBox
             rdp.Server = txtServer.Text.Trim();        // 52.203.146.198
             rdp.Domain = "ASPEC";
             rdp.UserName = txtUser.Text.Trim();          // 05037031330
 
-            // senha clara
+            // senha
             ((IMsRdpClientAdvancedSettings)rdp.AdvancedSettings)
                 .ClearTextPassword = txtPassword.Text;
 
-            // usa todo o tamanho do controle
+            // --------- HABILITA NLA ---------
+            var adv7 = (IMsRdpClientAdvancedSettings7)rdp.AdvancedSettings;
+            adv7.EnableCredSspSupport = true;   // envia CredSSP
+            adv7.AuthenticationLevel = 2;      // 0 = none, 1 = optional, 2 = require
+
+            // resolução
             rdp.DesktopWidth = rdp.Width;
             rdp.DesktopHeight = rdp.Height;
 
             try { rdp.Connect(); }
             catch (Exception ex)
-            { MessageBox.Show("Falha: " + ex.Message); }
+            { MessageBox.Show("Falha ao conectar:\n" + ex.Message); }
         }
 
+        // ---------- ao conectar, esconde campos ----------
         private void OnRdpConnected()
         {
-            // ----------- esconde os controles de login -----------
             Control[] toHide =
             {
-        lblServer!, txtServer!,
-        lblUser!,   txtUser!,
-        lblPassword!, txtPassword!,
-        chkAdmin!,  btnConnect!
-    };
+                lblServer!, txtServer!,
+                lblUser!,   txtUser!,
+                lblPassword!, txtPassword!,
+                chkAdmin!,  btnConnect!
+            };
+            foreach (var c in toHide) c.Visible = false;
 
-            foreach (var c in toHide)
-                c.Visible = false;
-
-            // ----------- mostra o desktop remoto -----------
             rdp.Visible = true;
             WindowState = FormWindowState.Maximized;
         }
